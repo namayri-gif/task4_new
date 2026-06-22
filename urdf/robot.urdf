@@ -10,7 +10,7 @@
          <left_joint>left_back_wheel_joint</left_joint>
          <right_joint>right_back_wheel_joint</right_joint>
 
-         <wheel_separation>0.52</wheel_separation>
+         <wheel_separation>0.30</wheel_separation>
          <wheel_diameter>0.14</wheel_diameter>
 
          <topic>/cmd_vel</topic>
@@ -73,10 +73,10 @@
         <visual name="">
             <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
             <geometry>
-                <box size="0.5 0.5 0.2"/>
+                <box size="0.3 0.3 0.2"/>
             </geometry>
             <material name="">
-                <color rgba="0.5 0.0 0.0 1.0"/>
+                <color rgba="0.5 0.5 0.0 1.0"/>
                 <texture filename=""/>
             </material>
         </visual>
@@ -84,7 +84,7 @@
         <collision>
             <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
             <geometry>
-                <box size="0.5 0.5 0.2"/>
+                <box size="0.3 0.3 0.2"/>
             </geometry>
         </collision>
     </link>
@@ -120,7 +120,7 @@
     <joint name="right_back_wheel_joint" type="continuous">
         <parent link="base_link"/>
         <child link="right_back_wheel_link"/>
-        <origin xyz="-0.15 -0.26 -0.1" rpy="0 0 0"/>
+        <origin xyz="-0.1 -0.15 -0.1" rpy="0 0 0"/>
         <axis xyz="0 1 0"/>
     </joint>
 
@@ -155,7 +155,7 @@
     <joint name="right_front_wheel_joint" type="continuous">
         <parent link="base_link"/>
         <child link="right_front_wheel_link"/>
-        <origin xyz="0.15 -0.26 -0.1" rpy="0 0 0"/>
+        <origin xyz="0.1 -0.15 -0.1" rpy="0 0 0"/>
         <axis xyz="0 1 0"/>
     </joint>
 
@@ -190,7 +190,7 @@
     <joint name="left_back_wheel_joint" type="continuous">
         <parent link="base_link"/>
         <child link="left_back_wheel_link"/>
-        <origin xyz="-0.15 0.26 -0.1" rpy="0 0 0"/>
+        <origin xyz="-0.1 0.15 -0.1" rpy="0 0 0"/>
         <axis xyz="0 1 0"/>
     </joint>
 
@@ -225,7 +225,7 @@
     <joint name="left_front_wheel_joint" type="continuous">
         <parent link="base_link"/>
         <child link="left_front_wheel_link"/>
-        <origin xyz="0.15 0.26 -0.1" rpy="0 0 0"/>
+        <origin xyz="0.1 0.15 -0.1" rpy="0 0 0"/>
         <axis xyz="0 1 0"/>
     </joint>
 
