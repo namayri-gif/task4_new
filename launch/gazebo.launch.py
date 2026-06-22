@@ -1,7 +1,7 @@
 import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription
+from launch.actions import IncludeLaunchDescription, TimerAction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 
@@ -40,10 +40,14 @@ def generate_launch_description():
         arguments=[
             '-topic', 'robot_description',
             '-name', 'my_robot',
-            '-x', '-2.0', '-y', '-0.5', '-z', '0.1'
+            '-x', '0.0', '-y', '0.0', '-z', '0.2'
         ],
         output='screen'
     )
+
+    # Delay spawn by 3 seconds so robot_state_publisher is guaranteed
+    # to be publishing /robot_description before 'create' tries to read it
+    delayed_spawn = TimerAction(period=3.0, actions=[spawn_entity])
 
     # Bridge clock (and cmd_vel/odom if needed) between gz and ROS 2
     clock_bridge = Node(
@@ -56,6 +60,6 @@ def generate_launch_description():
     return LaunchDescription([
         gazebo,
         robot_state_publisher,
-        spawn_entity,
+        delayed_spawn,
         clock_bridge
     ])
