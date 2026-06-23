@@ -17,7 +17,6 @@ def generate_launch_description():
     with open(urdf_path, 'r') as f:
         robot_description = f.read()
 
-    # Launch Gazebo (gz sim) with the turtlebot3_world
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(pkg_ros_gz_sim, 'launch', 'gz_sim.launch.py')
@@ -25,7 +24,6 @@ def generate_launch_description():
         launch_arguments={'gz_args': f'-r {world_path}'}.items()
     )
 
-    # Publish robot_description so spawn / RViz can use it
     robot_state_publisher = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
@@ -33,7 +31,6 @@ def generate_launch_description():
         parameters=[{'robot_description': robot_description, 'use_sim_time': True}]
     )
 
-    # Spawn the robot into Gazebo (gz sim)
     spawn_entity = Node(
         package='ros_gz_sim',
         executable='create',
@@ -45,15 +42,19 @@ def generate_launch_description():
         output='screen'
     )
 
-    # Delay spawn by 3 seconds so robot_state_publisher is guaranteed
-    # to be publishing /robot_description before 'create' tries to read it
     delayed_spawn = TimerAction(period=3.0, actions=[spawn_entity])
 
-    # Bridge clock (and cmd_vel/odom if needed) between gz and ROS 2
-    clock_bridge = Node(
+    # Bridge topics between gz sim and ROS 2
+    gz_bridge = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
-        arguments=['/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock'],
+        arguments=[
+            '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock',
+            '/cmd_vel@geometry_msgs/msg/Twist]gz.msgs.Twist',
+            '/odom@nav_msgs/msg/Odometry[gz.msgs.Odometry',
+            '/tf@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V',
+            '/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan',
+        ],
         output='screen'
     )
 
@@ -61,5 +62,5 @@ def generate_launch_description():
         gazebo,
         robot_state_publisher,
         delayed_spawn,
-        clock_bridge
+        gz_bridge
     ])
